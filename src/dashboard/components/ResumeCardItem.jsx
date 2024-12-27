@@ -30,8 +30,8 @@ function ResumeCardItem({ resume, refreshData }) {
         try {
             setLoading(true);
             const resp = await GlobalApi.DeleteResumeById(resume.documentId);
+            console.log('Delete resume response: ', resp);
             if(resp){
-                console.log('Delete resume response: ', resp);
                 // navigation('/dashboard');
                 toast({
                     title:'Success',

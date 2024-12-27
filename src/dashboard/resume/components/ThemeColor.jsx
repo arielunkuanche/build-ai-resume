@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
     Popover,
     PopoverContent,
@@ -7,19 +7,46 @@ import {
 import { Button } from '../../../components/ui/button';
 import { LayoutGrid } from 'lucide-react';
 import { ResumeInfoContext } from '../../../context/ResumeInfoContext';
+import { useParams } from 'react-router-dom';
+import GlobalApi from '../../../../service/GlobalApi';
+import { useToast } from "@/hooks/use-toast";
 
 function ThemeColor() {
     const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
+    const params = useParams();
+    const { toast }  = useToast();
     const colors = [
         '#BA8CA4', '#358600','#23BE97','#03110E','#8E5572',
         '#105645','#947A61', '#C0960C', '#F2A0A1', '#2E3E4D',
         '#C85C41', '#D78A76', '#6687A3', '#B3B752', '#ED6C1D',
     ];
-    const onSelectColor = (color) => {
+    const onSelectColor = async (color) => {
         setResumeInfo({
             ...resumeInfo,
             themeColor: color    
-        });   
+        });
+        const data = {
+            data: {
+                themeColor: color
+            }
+        };
+        try {
+            const resp = await GlobalApi.UpdateResume(params?.resumeId, data);
+            console.log('Theme color update: ', resp);
+            if(resp){
+                toast({
+                    title: 'Success',
+                    description: 'Theme color updated successfully!'
+                })
+            }else{
+                toast({
+                    title: 'Error',
+                    description: 'Error updating theme color!'
+                })
+            }
+        } catch (error) {
+            console.error('Error updating theme color: ', error.message);
+        }   
     };
     return (
         <Popover>

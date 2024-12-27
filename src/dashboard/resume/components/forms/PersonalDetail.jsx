@@ -18,7 +18,7 @@ function PersonalDetail({ enableNext }) {
     
     useEffect(()=>{
         // the params display resumeId instead of documentId as in backend strapi collection record has the property field is resumeId, like firstName, lastName
-        console.log('Resume info in personal detail useEffect: ', resumeInfo);
+        console.log('Resume info in personal detail useEffect: ', params?.resumeInfo);
     },[]);
     
     const handleInputChange = (e) => {
