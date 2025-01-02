@@ -14,7 +14,7 @@ function Summary({ enableNext }) {
   const [loading, setLoading] = useState(false);
   const params = useParams();
   const { toast } = useToast();
-  const prompt = 'Job Title: {jobTitle}. Depends on job title give me list of summary for Experience level, Mid Level and Fresher level in 3-4 lines in array format. With summary and experience_level Field in JSON Format';
+  const prompt = 'Job Title: {jobTitle}. Depends on job title give me list of summary for four levels: Newly Graduated Student, Fresher Level, Mid Level, and Experience level in 3-4 lines in array format. With summary and experience_level Field in JSON Format';
   const [AIGeneratedSummaryList, setAIGeneratedSummaryList] = useState([]);
 
   useEffect(()=>{
@@ -31,7 +31,7 @@ function Summary({ enableNext }) {
       //console.log('Dynamic prompt: ', dynamicPrompt);
       const result = await AIChatSession.sendMessage(dynamicPrompt);
       if(result){
-        // console.log(result.response.text());
+        //console.log(result.response.text());
         setAIGeneratedSummaryList(JSON.parse(result.response.text()));
       }else{
         console.error('Error generating summary: ', result);

@@ -7,6 +7,7 @@ import example from '../../../../data/example';
 import { ResumeInfoContext } from '../../../../context/ResumeInfoContext';
 import GlobalApi from '../../../../../service/GlobalApi';
 import { useToast } from "@/hooks/use-toast"
+import { LoaderCircle } from 'lucide-react';
 
 function EditResume() {
     // use react-router-dom's useParams hook to get the resumeId from the URL
@@ -14,7 +15,8 @@ function EditResume() {
     // so the params here is an object contained the property: resumeId, any dynamic parameter defined in the route path
     const params = useParams();
     const { toast } = useToast();
-    const [resumeInfo, setResumeInfo] = useState()
+    const [resumeInfo, setResumeInfo] = useState();
+    const [loading, setLoading] = useState(false);  
     useEffect(()=>{
         // console.log('Dynamic resumeId: ', params.resumeId)
         // setResumeInfo(example);
@@ -22,6 +24,7 @@ function EditResume() {
     }, []);
     // instead of using the example data, below function is to fetch the resume data from the Strapi API
     const GetResumeInfo = async() => {
+        setLoading(true);
         try {
             const resp = await GlobalApi.GetResumeById(params?.resumeId);
             // console.log('Get resume by id response: ', resp);
@@ -35,6 +38,8 @@ function EditResume() {
             }
         } catch (error) {
             console.log('Error getting resume by id: ', error.message);
+        } finally {
+            setLoading(false);
         }
     };
     return (
@@ -44,7 +49,11 @@ function EditResume() {
                 {/* from section */}
                 <FormSection />
                 {/* preview section */}
-                <PreviewSection />
+                { loading ? 
+                <div className='flex justify-center items-center h-full'> 
+                    <LoaderCircle className='animate-spin' size={40} /> 
+                </div> : 
+                <PreviewSection /> }
             </div>
         </ResumeInfoContext.Provider>
     )
